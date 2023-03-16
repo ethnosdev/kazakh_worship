@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kazakh_worship/home/home_page_manager.dart';
 import 'package:kazakh_worship/service_locator.dart';
 import 'package:kazakh_worship/song/song_page.dart';
 import 'package:kazakh_worship/theme_manager.dart';
@@ -13,7 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final manager = getIt<ThemeManager>();
+  final themeManager = getIt<ThemeManager>();
+  final manager = HomePageManager();
+
+  @override
+  void initState() {
+    super.initState();
+    manager.init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +31,9 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               onPressed: () {
-                manager.toggleTheme();
+                themeManager.toggleTheme();
               },
-              icon: (manager.isDark)
+              icon: (themeManager.isDark)
                   ? Icon(Icons.light_mode)
                   : Icon(Icons.dark_mode),
             ),
@@ -38,21 +47,27 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('song name'),
-                    onTap: () {
-                      print('song $index');
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SongPage()),
-                      );
-                    },
-                  );
-                },
-              ),
+              child: ValueListenableBuilder<List<String>>(
+                  valueListenable: manager.songNotifier,
+                  builder: (context, titles, child) {
+                    return ListView.builder(
+                      itemCount: titles.length,
+                      itemBuilder: (context, index) {
+                        final title = titles[index];
+                        return ListTile(
+                          title: Text(title),
+                          onTap: () {
+                            print('song $index');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SongPage()),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  }),
             ),
           ],
         ));
