@@ -12,6 +12,13 @@ class HomePageManager {
     _songs = await dataRepo.getSongs();
     final titles = _songs.map((song) => song.title).toList();
     songNotifier.value = titles;
-    
+  }
+
+  void search(String word) {
+    final results = _songs
+        .where((song) => song.title.toLowerCase().contains(word.toLowerCase()))
+        .map((song) => song.title)
+        .toList();
+    songNotifier.value = results;
   }
 }

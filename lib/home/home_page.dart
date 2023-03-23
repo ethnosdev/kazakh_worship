@@ -45,6 +45,9 @@ class _HomePageState extends State<HomePage> {
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
               ),
+              onChanged: (value) {
+                manager.search(value);
+              },
             ),
             Expanded(
               child: ValueListenableBuilder<List<String>>(
