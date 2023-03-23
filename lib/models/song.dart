@@ -3,5 +3,9 @@ class Song {
   final String title;
   final String? lyrics;
 
-  Song(this.id, this.title, this.lyrics);
+  Song({
+    required this.id,
+    required this.title,
+    required this.lyrics,
+  });
 }
