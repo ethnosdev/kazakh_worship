@@ -4,20 +4,18 @@ import 'package:kazakh_worship/service_locator.dart';
 import 'package:kazakh_worship/services/data_repository.dart';
 
 class HomePageManager {
-  final songNotifier = ValueNotifier<List<String>>([]);
+  final songNotifier = ValueNotifier<List<Song>>([]);
   final dataRepo = getIt<DataRepository>();
   late final List<Song> _songs;
 
   Future<void> init() async {
     _songs = await dataRepo.getSongs();
-    final titles = _songs.map((song) => song.title).toList();
-    songNotifier.value = titles;
+    songNotifier.value = _songs;
   }
 
   void search(String word) {
     final results = _songs
         .where((song) => song.title.toLowerCase().contains(word.toLowerCase()))
-        .map((song) => song.title)
         .toList();
     songNotifier.value = results;
   }

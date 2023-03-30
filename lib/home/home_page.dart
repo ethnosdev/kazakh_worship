@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kazakh_worship/home/home_page_manager.dart';
+import 'package:kazakh_worship/models/song.dart';
 import 'package:kazakh_worship/service_locator.dart';
 import 'package:kazakh_worship/song/song_page.dart';
 import 'package:kazakh_worship/theme_manager.dart';
@@ -50,21 +51,21 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             Expanded(
-              child: ValueListenableBuilder<List<String>>(
+              child: ValueListenableBuilder<List<Song>>(
                   valueListenable: manager.songNotifier,
-                  builder: (context, titles, child) {
+                  builder: (context, songs, child) {
                     return ListView.builder(
-                      itemCount: titles.length,
+                      itemCount: songs.length,
                       itemBuilder: (context, index) {
-                        final title = titles[index];
+                        final song = songs[index];
                         return ListTile(
-                          title: Text(title),
+                          title: Text(song.title),
                           onTap: () {
                             print('song $index');
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SongPage()),
+                                  builder: (context) => SongPage(song: song)),
                             );
                           },
                         );

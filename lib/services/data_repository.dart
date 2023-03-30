@@ -2,6 +2,8 @@ import 'package:kazakh_worship/models/song.dart';
 
 abstract class DataRepository {
   Future<List<Song>> getSongs();
+
+  Future<Song> getSong({required String id});
 }
 
 class FakeData implements DataRepository {
@@ -147,5 +149,10 @@ class FakeData implements DataRepository {
       Song(id: '95', title: 'Шаттанамын Ұлы Құдай жүрегі', lyrics: null),
       Song(id: '91', title: 'Эвейну шалом алейхем', lyrics: null),
     ];
+  }
+  
+  @override
+  Future<Song> getSong({required String id})async {
+    return Song(id: id, title: 'song', lyrics: 'lalala');
   }
 }
