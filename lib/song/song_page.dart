@@ -26,7 +26,9 @@ class _SongPageState extends State<SongPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(widget.song.title),
+      ),
       body: ValueListenableBuilder<bool>(
         valueListenable: manager.loadingNotifier,
         builder: (context, isLoading, child) {
@@ -51,6 +53,9 @@ class LyricsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(manager.lyrics);
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(manager.lyrics),
+    );
   }
 }
