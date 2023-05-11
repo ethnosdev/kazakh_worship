@@ -30,14 +30,18 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text('Kazakh worship songs'),
           actions: [
-            IconButton(
-              onPressed: () {
-                themeManager.toggleTheme();
-              },
-              icon: (themeManager.isDark)
-                  ? const Icon(Icons.light_mode)
-                  : const Icon(Icons.dark_mode),
-            ),
+            ValueListenableBuilder<ThemeData>(
+                valueListenable: themeManager.themeListener,
+                builder: (context, value, child) {
+                  return IconButton(
+                    onPressed: () {
+                      themeManager.toggleTheme();
+                    },
+                    icon: (themeManager.isDark)
+                        ? const Icon(Icons.light_mode)
+                        : const Icon(Icons.dark_mode),
+                  );
+                }),
           ],
         ),
         body: Column(

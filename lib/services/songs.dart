@@ -7,7 +7,7 @@ final songList = [
       Song(id: '102', title: 'Алғыс Саған, жалғыз Саған', lyrics: algisSagan),
       Song(id: '36', title: 'Арайлап атты таңдарым', lyrics: arailap),
       Song(id: '31', title: 'Арайымен атқан күннің нұр кү', lyrics: araimen),
-      Song(id: '105', title: 'Аспанда жарық ай', lyrics: aspanda),
+      Song(id: '105', title: 'Аспанда жарық ай', lyrics: null),
       Song(id: '8', title: 'Аспанда таңғы жұлдыз туған кезде', lyrics: null),
       Song(id: '112', title: 'Атың мадақталсын', lyrics: null),
       Song(id: '98', title: 'Әлемнің бәрін Құдай жаратқан', lyrics: null),
