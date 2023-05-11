@@ -28,22 +28,22 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Kazakh worship songs'),
+          title: const Text('Kazakh worship songs'),
           actions: [
             IconButton(
               onPressed: () {
                 themeManager.toggleTheme();
               },
               icon: (themeManager.isDark)
-                  ? Icon(Icons.light_mode)
-                  : Icon(Icons.dark_mode),
+                  ? const Icon(Icons.light_mode)
+                  : const Icon(Icons.dark_mode),
             ),
           ],
         ),
         body: Column(
           children: [
             TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 prefixIcon: Icon(Icons.search),
               ),
               onChanged: (value) {
@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage> {
                         return ListTile(
                           title: Text(song.title),
                           onTap: () {
-                            print('song $index');
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -5,7 +5,7 @@ import 'package:kazakh_worship/theme_manager.dart';
 
 void main() {
   setupServiceLocater();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -22,11 +22,10 @@ class _MyAppState extends State<MyApp> {
     return ValueListenableBuilder<ThemeData>(
         valueListenable: manager.themeListener,
         builder: (context, theme, child) {
-          print('building');
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: theme,
-            home: HomePage(),
+            home: const HomePage(),
           );
         });
   }
