@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Kazakh worship songs'),
+          title: const Text('Құдайға мадақтайық'),
           actions: [
             ValueListenableBuilder<ThemeData>(
                 valueListenable: themeManager.themeListener,
