@@ -1,16 +1,16 @@
-# Kazakh Worship Privacy Policy
+# Құдайға мадақтайық құпиялылық саясаты
 
-### Collection of personal information
+### Жеке мәліметтер жинағы
 
-We do not collect any personal information in this app. All of your data is stored in a local database on your phone. You can delete this data by uninstalling the app.
+Біз бұл қолданбада жеке ақпаратты жинамаймыз. Барлық деректер телефоныңыздағы жергілікті дерекқорда сақталады. Бұл деректерді қолданбаны жою арқылы жоюға болады.
 
-### Disclosure of personal information
+### Жеке ақпаратты ашу
 
-As we do not collect any personal information, none of your personal information is shared with any third party.
+Біз ешқандай жеке ақпаратты жинамайтындықтан, сіздің жеке ақпаратыңыздың ешқайсысы үшінші тараппен бөлісілмейді.
 
-### Policy changes
+### Саясат өзгерістері
 
-Any changes to this policy will be posted as an update of the App. You are advised to regularly view our most recent privacy policy.
+Осы саясатқа енгізілген кез келген өзгерістер қолданбаның жаңартуы ретінде жарияланады. Сізге біздің ең соңғы құпиялылық саясатымызды үнемі қарап тұру ұсынылады.
 
 ---
-Last updated: June 1, 2023
+Соңғы жаңартылған: 2023 жылдың 1 маусымы
