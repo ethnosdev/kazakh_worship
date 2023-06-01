@@ -4,6 +4,7 @@ import 'package:kazakh_worship/service_locator.dart';
 import 'package:kazakh_worship/theme_manager.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocater();
   final manager = getIt<ThemeManager>();
   await manager.init();
