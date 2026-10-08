@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_chord/flutter_chord.dart';
-import 'package:kazakh_worship/data/songs_data.dart';
+import 'package:kazakh_worship/models/song.dart';
+import 'package:kazakh_worship/services/data_repository.dart';
 
 void main() {
-  testWidgets('Every song in songList parses cleanly with ChordProcessor', (tester) async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late List<Song> songs;
+
+  setUpAll(() async {
+    final repo = AssetDataRepository();
+    songs = await repo.getSongs();
+  });
+
+  testWidgets('Every song in assets parses cleanly with ChordProcessor', (tester) async {
+    expect(songs.length, 142);
+
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
           builder: (context) {
             final processor = ChordProcessor(context);
-            for (final song in songList) {
+            for (final song in songs) {
               final doc = processor.processText(
                 text: song.chords,
                 lyricsStyle: const TextStyle(fontSize: 18),

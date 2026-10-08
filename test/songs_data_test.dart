@@ -1,8 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kazakh_worship/data/songs_data.dart';
+import 'package:kazakh_worship/models/song.dart';
+import 'package:kazakh_worship/services/data_repository.dart';
 
 void main() {
-  group('Songs Data Integrity Tests', () {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('Songs Asset Data Integrity Tests', () {
+    late List<Song> songList;
+
+    setUpAll(() async {
+      final repo = AssetDataRepository();
+      songList = await repo.getSongs();
+    });
+
     test('Exactly 142 songs are present', () {
       expect(songList.length, 142);
     });

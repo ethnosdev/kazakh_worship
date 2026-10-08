@@ -1,8 +1,5 @@
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:kazakh_worship/data/categories_data.dart';
-import 'package:kazakh_worship/data/guitar_data.dart';
-import 'package:kazakh_worship/data/prayers_data.dart';
-import 'package:kazakh_worship/data/songs_data.dart';
+import 'package:kazakh_worship/models/category.dart';
 import 'package:kazakh_worship/models/guitar_guide.dart';
 import 'package:kazakh_worship/models/prayer.dart';
 import 'package:kazakh_worship/models/song.dart';
@@ -53,8 +50,7 @@ class AssetDataRepository implements DataRepository {
       // Fallback
     }
 
-    _cachedSongs = List<Song>.unmodifiable(songList);
-    return _cachedSongs!;
+    return const [];
   }
 
   @override
@@ -126,15 +122,35 @@ class AssetDataRepository implements DataRepository {
       chordLines.removeLast();
     }
 
-    final chords = chordLines.join('\n');
-    final lyricLines = <String>[];
+    final normalizedChordLines = <String>[];
     for (final cl in chordLines) {
+      if (cl.trim().isEmpty) {
+        if (normalizedChordLines.isNotEmpty && normalizedChordLines.last.isNotEmpty) {
+          normalizedChordLines.add('');
+        }
+      } else {
+        normalizedChordLines.add(cl);
+      }
+    }
+
+    final chords = normalizedChordLines.join('\n');
+    final lyricLines = <String>[];
+    for (final cl in normalizedChordLines) {
+      if (cl.trim().isEmpty) {
+        if (lyricLines.isNotEmpty && lyricLines.last.isNotEmpty) {
+          lyricLines.add('');
+        }
+        continue;
+      }
       final stripped = cl.replaceAll(RegExp(r'\[.*?\]'), '').trim();
-      final nonPunct = stripped.replaceAll(RegExp(r'[()/-:, \t]'), '');
-      if (nonPunct.isEmpty && cl.trim().isNotEmpty) {
+      final nonPunct = stripped.replaceAll(RegExp(r'[()/-:, \t0-9prрxх]'), '');
+      if (nonPunct.isEmpty) {
         continue;
       }
       lyricLines.add(stripped);
+    }
+    while (lyricLines.isNotEmpty && lyricLines.last.isEmpty) {
+      lyricLines.removeLast();
     }
     final lyrics = lyricLines.join('\n').trim();
 
@@ -171,8 +187,7 @@ class AssetDataRepository implements DataRepository {
       }
     } catch (_) {}
 
-    _cachedPrayers = List<PrayerItem>.unmodifiable(prayerList);
-    return _cachedPrayers!;
+    return const [];
   }
 
   PrayerItem _parsePrayer(String content, {required String fallbackId}) {
@@ -258,8 +273,7 @@ class AssetDataRepository implements DataRepository {
       }
     } catch (_) {}
 
-    _cachedGuitarGuides = List<GuitarGuideItem>.unmodifiable(guitarGuideList);
-    return _cachedGuitarGuides!;
+    return const [];
   }
 
   GuitarGuideItem _parseGuitarGuide(String content, {required String fallbackId}) {
@@ -339,40 +353,6 @@ class AssetDataRepository implements DataRepository {
       }
     } catch (_) {}
 
-    _cachedCategories = List<SongCategory>.unmodifiable(categoryList);
-    return _cachedCategories!;
-  }
-}
-
-class FakeData implements DataRepository {
-  @override
-  Future<List<Song>> getSongs() async {
-    return songList;
-  }
-
-  @override
-  Future<Song> getSong({required String id}) async {
-    return songList.firstWhere((song) => song.id == id);
-  }
-
-  @override
-  Future<Song?> getSongByNumber(int number) async {
-    final results = songList.where((song) => song.number == number);
-    return results.isNotEmpty ? results.first : null;
-  }
-
-  @override
-  Future<List<PrayerItem>> getPrayers() async {
-    return prayerList;
-  }
-
-  @override
-  Future<List<GuitarGuideItem>> getGuitarGuides() async {
-    return guitarGuideList;
-  }
-
-  @override
-  Future<List<SongCategory>> getCategories() async {
-    return categoryList;
+    return const [];
   }
 }

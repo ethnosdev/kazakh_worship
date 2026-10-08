@@ -49,5 +49,19 @@ void main() {
       expect(categories.length, 19);
       expect(categories.first.name, 'Мәсіхтің туылуы');
     });
+
+    test('Songs have vertical blank lines between verses', () async {
+      final song2 = await repo.getSongByNumber(2);
+      expect(song2, isNotNull);
+      // Chords have blank lines between verse 1, chorus, verse 2, verse 3
+      final chordVerses = song2!.chords.split('\n\n');
+      expect(chordVerses.length, greaterThanOrEqualTo(3));
+
+      // Lyrics also have blank lines between verses
+      final lyricVerses = song2.lyrics.split('\n\n');
+      expect(lyricVerses.length, greaterThanOrEqualTo(3));
+      // Lyrics does not contain stray instrumental tokens like '- 2p'
+      expect(song2.lyrics.contains('- 2p'), false);
+    });
   });
 }

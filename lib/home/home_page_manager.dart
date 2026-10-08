@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kazakh_worship/data/categories_data.dart';
+import 'package:kazakh_worship/models/category.dart';
 import 'package:kazakh_worship/models/song.dart';
 import 'package:kazakh_worship/service_locator.dart';
 import 'package:kazakh_worship/services/data_repository.dart';
