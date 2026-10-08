@@ -38,14 +38,16 @@ class _PrayersPageState extends State<PrayersPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      itemCount: _prayers.length,
-      itemBuilder: (context, index) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Дұғалар мен сенім'),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+              itemCount: _prayers.length,
+              itemBuilder: (context, index) {
         final prayer = _prayers[index];
         final lang = _languageSelection[prayer.id] ?? 'kk';
         final hasMn = prayer.contentMn != null && prayer.contentMn!.isNotEmpty;
@@ -122,6 +124,9 @@ class _PrayersPageState extends State<PrayersPage> {
           ),
         );
       },
-    );
-  }
+    ),
+  );
 }
+}
+
+

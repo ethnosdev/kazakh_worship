@@ -18,11 +18,9 @@ void main() {
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
-    // Verify main app bar title and navigation destinations
+    // Verify main app bar title and hamburger menu
     expect(find.text('Құдайға мадақтайық'), findsOneWidget);
-    expect(find.text('Әндер'), findsOneWidget);
-    expect(find.text('Дұғалар'), findsOneWidget);
-    expect(find.text('Гитара'), findsOneWidget);
+    expect(find.byIcon(Icons.menu), findsOneWidget);
 
     // Verify first song is displayed with its number
     expect(find.text('Кел, кел бізге Имануил'), findsOneWidget);
@@ -49,18 +47,40 @@ void main() {
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
 
-    // Switch to Prayers tab
+    // Open hamburger menu drawer
+    await tester.tap(find.byIcon(Icons.menu));
+    await tester.pumpAndSettle();
+
+    // Verify drawer items: songs are the main screen, so only other sections are in drawer
+    expect(find.text('Дұғалар'), findsOneWidget);
+    expect(find.text('Гитара үйрену'), findsOneWidget);
+
+    // Open Prayers page via drawer
     await tester.tap(find.text('Дұғалар'));
     await tester.pumpAndSettle();
 
     expect(find.text('Дұғалар мен сенім'), findsOneWidget);
     expect(find.text('Сенім белгісі'), findsOneWidget);
 
-    // Switch to Guitar tab
-    await tester.tap(find.text('Гитара'));
+    // Press back arrow to return to songs
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Құдайға мадақтайық'), findsOneWidget);
+
+    // Open drawer again and open Guitar Guide page
+    await tester.tap(find.byIcon(Icons.menu));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Гитара үйрену'));
     await tester.pumpAndSettle();
 
     expect(find.text('Гитара үйрену'), findsWidgets);
     expect(find.text('Гитарды қалай көктеу'), findsOneWidget);
+
+    // Press back arrow to return to songs
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Құдайға мадақтайық'), findsOneWidget);
   });
 }

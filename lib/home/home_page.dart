@@ -19,7 +19,6 @@ class _HomePageState extends State<HomePage> {
   final themeManager = getIt<ThemeManager>();
   final manager = HomePageManager();
   final _searchController = TextEditingController();
-  int _currentTabIndex = 0;
 
   @override
   void initState() {
@@ -96,53 +95,45 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          _currentTabIndex == 0
-              ? 'Құдайға мадақтайық'
-              : _currentTabIndex == 1
-                  ? 'Дұғалар мен сенім'
-                  : 'Гитара үйрену',
-        ),
+        title: const Text('Құдайға мадақтайық'),
         actions: [
-          if (_currentTabIndex == 0) ...[
-            ValueListenableBuilder<bool>(
-              valueListenable: manager.sortByNumberNotifier,
-              builder: (context, sortByNumber, child) {
-                return IconButton(
-                  icon: Icon(
-                    sortByNumber
-                        ? Icons.format_list_numbered
-                        : Icons.sort_by_alpha,
-                  ),
-                  tooltip: sortByNumber
-                      ? 'Әліпби бойынша сұрыптау'
-                      : 'Нөмір бойынша сұрыптау',
-                  onPressed: () => manager.toggleSort(),
-                );
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.tag),
-              tooltip: 'Ән нөміріне өту',
-              onPressed: () {
-                final navigator = Navigator.of(context);
-                JumpToSongDialog.show(
-                  context,
-                  maxSongNumber: 142,
-                  onSongSelected: (number) async {
-                    final song = await manager.dataRepo.getSongByNumber(number);
-                    if (song != null && mounted) {
-                      navigator.push(
-                        MaterialPageRoute(
-                          builder: (context) => SongPage(song: song),
-                        ),
-                      );
-                    }
-                  },
-                );
-              },
-            ),
-          ],
+          ValueListenableBuilder<bool>(
+            valueListenable: manager.sortByNumberNotifier,
+            builder: (context, sortByNumber, child) {
+              return IconButton(
+                icon: Icon(
+                  sortByNumber
+                      ? Icons.format_list_numbered
+                      : Icons.sort_by_alpha,
+                ),
+                tooltip: sortByNumber
+                    ? 'Әліпби бойынша сұрыптау'
+                    : 'Нөмір бойынша сұрыптау',
+                onPressed: () => manager.toggleSort(),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.tag),
+            tooltip: 'Ән нөміріне өту',
+            onPressed: () {
+              final navigator = Navigator.of(context);
+              JumpToSongDialog.show(
+                context,
+                maxSongNumber: 142,
+                onSongSelected: (number) async {
+                  final song = await manager.dataRepo.getSongByNumber(number);
+                  if (song != null && mounted) {
+                    navigator.push(
+                      MaterialPageRoute(
+                        builder: (context) => SongPage(song: song),
+                      ),
+                    );
+                  }
+                },
+              );
+            },
+          ),
           ValueListenableBuilder<ThemeData>(
             valueListenable: themeManager.themeListener,
             builder: (context, value, child) {
@@ -157,39 +148,82 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _currentTabIndex,
-        children: [
-          _buildSongsTab(),
-          const PrayersPage(),
-          const GuitarGuidePage(),
-        ],
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.menu_book,
+                    size: 38,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Құдайға мадақ',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  Text(
+                    'Рухани әндер мен дұғалар',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: ListTile(
+                leading: const Icon(Icons.auto_stories),
+                title: const Text('Дұғалар', style: TextStyle(fontWeight: FontWeight.w600)),
+                subtitle: const Text('Сенім белгісі және жиналыс реттілігі'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PrayersPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: ListTile(
+                leading: const Icon(Icons.queue_music),
+                title: const Text('Гитара үйрену', style: TextStyle(fontWeight: FontWeight.w600)),
+                subtitle: const Text('Көктеу, шерту және ырғақ'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GuitarGuidePage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentTabIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentTabIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.music_note_outlined),
-            selectedIcon: Icon(Icons.music_note),
-            label: 'Әндер',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.auto_stories_outlined),
-            selectedIcon: Icon(Icons.auto_stories),
-            label: 'Дұғалар',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.queue_music_outlined),
-            selectedIcon: Icon(Icons.queue_music),
-            label: 'Гитара',
-          ),
-        ],
-      ),
+      body: _buildSongsTab(),
     );
   }
 

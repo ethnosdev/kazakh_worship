@@ -33,67 +33,70 @@ class _GuitarGuidePageState extends State<GuitarGuidePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      itemCount: _guides.length,
-      itemBuilder: (context, index) {
-        final guide = _guides[index];
-        return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                      foregroundColor: Theme.of(context).colorScheme.primary,
-                      child: const Icon(Icons.music_note),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            guide.title,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Гитара үйрену'),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+              itemCount: _guides.length,
+              itemBuilder: (context, index) {
+                final guide = _guides[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                              foregroundColor: Theme.of(context).colorScheme.primary,
+                              child: const Icon(Icons.music_note),
                             ),
-                          ),
-                          if (guide.subtitle.isNotEmpty)
-                            Text(
-                              guide.subtitle,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    guide.title,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  if (guide.subtitle.isNotEmpty)
+                                    Text(
+                                      guide.subtitle,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
-                        ],
-                      ),
+                          ],
+                        ),
+                        const Divider(height: 24),
+                        SelectableText(
+                          guide.content,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            height: 1.6,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const Divider(height: 24),
-                SelectableText(
-                  guide.content,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    height: 1.6,
                   ),
-                ),
-              ],
+                );
+              },
             ),
-          ),
-        );
-      },
     );
   }
 }
