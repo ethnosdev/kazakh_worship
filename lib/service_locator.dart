@@ -8,5 +8,5 @@ final getIt = GetIt.instance;
 void setupServiceLocater() {
   getIt.registerLazySingleton<UserSettings>(() => UserSettings());
   getIt.registerLazySingleton<ThemeManager>(() => ThemeManager());
-  getIt.registerLazySingleton<DataRepository>(() => FakeData());
+  getIt.registerLazySingleton<DataRepository>(() => AssetDataRepository());
 }

@@ -23,3 +23,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/songs/
+    - assets/prayers/
+    - assets/guitar/
+    - assets/categories/
