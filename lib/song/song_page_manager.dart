@@ -2,17 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:kazakh_worship/models/song.dart';
 import 'package:kazakh_worship/service_locator.dart';
 import 'package:kazakh_worship/services/data_repository.dart';
+import 'package:kazakh_worship/user_settings.dart';
 
 class SongPageManager {
   final loadingNotifier = ValueNotifier<bool>(true);
+  final fontSizeNotifier = ValueNotifier<double>(18.0);
+  final showChordsNotifier = ValueNotifier<bool>(false);
+  final currentIndexNotifier = ValueNotifier<int>(0);
+
   final dataRepo = getIt<DataRepository>();
+  final userSettings = getIt<UserSettings>();
 
-  String get lyrics => _song.lyrics ?? '';
-  late Song _song;
+  List<Song> songs = [];
 
-  Future<void> init(String songId) async {
+  Song get currentSong => songs.isNotEmpty ? songs[currentIndexNotifier.value] : _emptySong;
+
+  static const _emptySong = Song(
+    number: 1,
+    id: '1',
+    title: '',
+    lyrics: '',
+    chords: '',
+  );
+
+  Future<void> init(int initialSongNumber) async {
     loadingNotifier.value = true;
-    _song = await dataRepo.getSong(id: songId);
+    songs = List<Song>.from(await dataRepo.getSongs());
+    songs.sort((a, b) => a.number.compareTo(b.number));
+
+    final idx = songs.indexWhere((s) => s.number == initialSongNumber);
+    currentIndexNotifier.value = idx >= 0 ? idx : 0;
+
+    fontSizeNotifier.value = await userSettings.getFontSize();
+    showChordsNotifier.value = await userSettings.getShowChords();
     loadingNotifier.value = false;
+  }
+
+  void onPageChanged(int index) {
+    if (index >= 0 && index < songs.length) {
+      currentIndexNotifier.value = index;
+    }
+  }
+
+  Future<void> setFontSize(double size) async {
+    fontSizeNotifier.value = size;
+    await userSettings.setFontSize(size);
+  }
+
+  Future<void> toggleChords() async {
+    final newValue = !showChordsNotifier.value;
+    showChordsNotifier.value = newValue;
+    await userSettings.setShowChords(newValue);
+  }
+
+  int getIndexForSongNumber(int number) {
+    return songs.indexWhere((s) => s.number == number);
   }
 }

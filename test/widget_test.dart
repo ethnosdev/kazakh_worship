@@ -1,30 +1,66 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:kazakh_worship/main.dart';
+import 'package:kazakh_worship/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    setupServiceLocater();
+  });
+
+  tearDown(() {
+    getIt.reset();
+  });
+
+  testWidgets('Worship app smoke test - Navigation and Song viewing', (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify main app bar title and navigation destinations
+    expect(find.text('Құдайға мадақтайық'), findsOneWidget);
+    expect(find.text('Әндер'), findsOneWidget);
+    expect(find.text('Дұғалар'), findsOneWidget);
+    expect(find.text('Гитара'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Verify first song is displayed with its number
+    expect(find.text('Кел, кел бізге Имануил'), findsOneWidget);
+    expect(find.text('1'), findsWidgets);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Tap on the first song to open SongPage
+    await tester.tap(find.text('Кел, кел бізге Имануил').first);
+    await tester.pumpAndSettle();
+
+    // Verify SongPage header and song number
+    expect(find.text('#1 Кел, кел бізге Имануил'), findsOneWidget);
+
+    // By default, chords are OFF
+    expect(find.byTooltip('Аккордтарды көрсету'), findsOneWidget);
+
+    // Toggle chords ON
+    await tester.tap(find.byTooltip('Аккордтарды көрсету'));
+    await tester.pumpAndSettle();
+
+    // Now chords button says 'Аккордтарды жасыру'
+    expect(find.byTooltip('Аккордтарды жасыру'), findsOneWidget);
+
+    // Go back to home
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+
+    // Switch to Prayers tab
+    await tester.tap(find.text('Дұғалар'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Дұғалар мен сенім'), findsOneWidget);
+    expect(find.text('Сенім белгісі'), findsOneWidget);
+
+    // Switch to Guitar tab
+    await tester.tap(find.text('Гитара'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Гитара үйрену'), findsWidgets);
+    expect(find.text('Гитарды қалай көктеу'), findsOneWidget);
   });
 }

@@ -1,0 +1,5 @@
+We want to make the app match the features of the song book as much as possible. There is also a new update to the pdf version of the songbook and this is the source of truth for the app. We need to update all of the songs. We should also think about how to incorporate the other sections of the book into the app. Some specific requests to implement are the following: you can't search by number, which is mostly how people look them up in the regular book. Basically the more features we could add from the book the more usable it would be. Adjustable font sizes would be the number one thing. From there I think our wish list would be: 1. #133 is a new song that was written after we put out the app, it would be great to add that. 
+2. Song numbers from the book to help with navigation.  
+3. A page of Church Prayers with the Lord's prayer, Apostles Creed, Ten commandments, and the page on Repentance from the book. I can send you all the texts. 
+4. Mongolian songs #134-142
+5. Guitar Chords for the songs.

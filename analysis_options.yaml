@@ -4,3 +4,11 @@ anylizer:
   language:
     strict-casts: true
     strict-raw-types: true
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
