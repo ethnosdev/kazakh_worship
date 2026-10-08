@@ -3,30 +3,40 @@ import 'package:kazakh_worship/service_locator.dart';
 import 'package:kazakh_worship/user_settings.dart';
 
 class ThemeManager {
+  final themeModeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
   final themeListener = ValueNotifier<ThemeData>(_lightTheme);
   final userSettings = getIt<UserSettings>();
-  bool _isDark = false;
+
+  ThemeMode get themeMode => themeModeNotifier.value;
+  bool get isDark => themeModeNotifier.value == ThemeMode.dark;
 
   Future<void> init() async {
-    _isDark = await userSettings.getIsDark();
-    if (_isDark) {
+    final mode = await userSettings.getThemeMode();
+    themeModeNotifier.value = mode;
+    _updateThemeListener(mode);
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    themeModeNotifier.value = mode;
+    _updateThemeListener(mode);
+    await userSettings.setThemeMode(mode);
+  }
+
+  void _updateThemeListener(ThemeMode mode) {
+    if (mode == ThemeMode.dark) {
       themeListener.value = _darkTheme;
     } else {
       themeListener.value = _lightTheme;
     }
   }
-
-  bool get isDark => _isDark;
 
   void toggleTheme() async {
-    _isDark = !_isDark;
-    if (_isDark) {
-      themeListener.value = _darkTheme;
-    } else {
-      themeListener.value = _lightTheme;
-    }
-    await userSettings.setIsDark(_isDark);
+    final newMode = themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+    await setThemeMode(newMode);
   }
+
+  static ThemeData get lightTheme => _lightTheme;
+  static ThemeData get darkTheme => _darkTheme;
 }
 
 final _lightTheme = ThemeData(

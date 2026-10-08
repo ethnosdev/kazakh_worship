@@ -6,12 +6,13 @@ import 'package:kazakh_worship/user_settings.dart';
 
 class SongPageManager {
   final loadingNotifier = ValueNotifier<bool>(true);
-  final fontSizeNotifier = ValueNotifier<double>(18.0);
   final showChordsNotifier = ValueNotifier<bool>(false);
   final currentIndexNotifier = ValueNotifier<int>(0);
 
   final dataRepo = getIt<DataRepository>();
   final userSettings = getIt<UserSettings>();
+
+  ValueNotifier<double> get fontSizeNotifier => userSettings.fontSizeNotifier;
 
   List<Song> songs = [];
 
@@ -33,7 +34,7 @@ class SongPageManager {
     final idx = songs.indexWhere((s) => s.number == initialSongNumber);
     currentIndexNotifier.value = idx >= 0 ? idx : 0;
 
-    fontSizeNotifier.value = await userSettings.getFontSize();
+    await userSettings.getFontSize();
     showChordsNotifier.value = await userSettings.getShowChords();
     loadingNotifier.value = false;
   }
@@ -45,7 +46,6 @@ class SongPageManager {
   }
 
   Future<void> setFontSize(double size) async {
-    fontSizeNotifier.value = size;
     await userSettings.setFontSize(size);
   }
 

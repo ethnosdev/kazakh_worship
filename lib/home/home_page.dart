@@ -3,10 +3,9 @@ import 'package:kazakh_worship/guitar/guitar_guide_page.dart';
 import 'package:kazakh_worship/home/home_page_manager.dart';
 import 'package:kazakh_worship/models/song.dart';
 import 'package:kazakh_worship/prayers/prayers_page.dart';
-import 'package:kazakh_worship/service_locator.dart';
+import 'package:kazakh_worship/settings/settings_page.dart';
 import 'package:kazakh_worship/song/song_page.dart';
 import 'package:kazakh_worship/song/widgets/jump_to_song_dialog.dart';
-import 'package:kazakh_worship/theme_manager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,7 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final themeManager = getIt<ThemeManager>();
   final manager = HomePageManager();
   final _searchController = TextEditingController();
 
@@ -134,18 +132,6 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          ValueListenableBuilder<ThemeData>(
-            valueListenable: themeManager.themeListener,
-            builder: (context, value, child) {
-              return IconButton(
-                onPressed: () => themeManager.toggleTheme(),
-                icon: themeManager.isDark
-                    ? const Icon(Icons.light_mode)
-                    : const Icon(Icons.dark_mode),
-                tooltip: themeManager.isDark ? 'Жарық тақырып' : 'Күңгірт тақырып',
-              );
-            },
-          ),
         ],
       ),
       drawer: Drawer(
@@ -215,6 +201,24 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const GuitarGuidePage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Баптаулар', style: TextStyle(fontWeight: FontWeight.w600)),
+                subtitle: const Text('Қаріп өлшемі, тақырып / Settings'),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
                     ),
                   );
                 },

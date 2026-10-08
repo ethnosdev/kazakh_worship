@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kazakh_worship/models/song.dart';
+import 'package:kazakh_worship/shared/zoom_wrapper.dart';
 import 'package:kazakh_worship/song/song_page_manager.dart';
 import 'package:kazakh_worship/song/widgets/chord_lyrics_view.dart';
-import 'package:kazakh_worship/song/widgets/font_size_dialog.dart';
 import 'package:kazakh_worship/song/widgets/jump_to_song_dialog.dart';
 
 class SongPage extends StatefulWidget {
@@ -116,17 +116,6 @@ class _SongPageState extends State<SongPage> {
                             onPressed: () => manager.toggleChords(),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.format_size),
-                            tooltip: 'Қаріп өлшемі',
-                            onPressed: () {
-                              FontSizeDialog.show(
-                                context,
-                                currentSize: fontSize,
-                                onSizeChanged: (newSize) => manager.setFontSize(newSize),
-                              );
-                            },
-                          ),
-                          IconButton(
                             icon: const Icon(Icons.tag),
                             tooltip: 'Ән нөміріне өту',
                             onPressed: () {
@@ -144,18 +133,26 @@ class _SongPageState extends State<SongPage> {
                           ),
                         ],
                       ),
-                      body: PageView.builder(
-                        controller: _pageController,
-                        itemCount: manager.songs.length,
-                        onPageChanged: (index) => manager.onPageChanged(index),
-                        itemBuilder: (context, index) {
-                          final song = manager.songs[index];
-                          return ChordLyricsView(
-                            song: song,
-                            fontSize: fontSize,
-                            showChords: showChords,
-                          );
+                      body: ZoomWrapper(
+                        initialScale: fontSize,
+                        minScale: 10.0,
+                        maxScale: 40.0,
+                        onScaleChanged: (newScale) {
+                          manager.setFontSize(newScale);
                         },
+                        builder: (context, scale) => PageView.builder(
+                          controller: _pageController,
+                          itemCount: manager.songs.length,
+                          onPageChanged: (index) => manager.onPageChanged(index),
+                          itemBuilder: (context, index) {
+                            final song = manager.songs[index];
+                            return ChordLyricsView(
+                              song: song,
+                              fontSize: scale,
+                              showChords: showChords,
+                            );
+                          },
+                        ),
                       ),
                       bottomNavigationBar: SafeArea(
                         child: Container(
