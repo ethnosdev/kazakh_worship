@@ -1,12 +1,12 @@
 name: kazakh_worship
-description: A new Flutter project.
+description: Kazakh song book app.
 
 publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.13.0
 
 dependencies:
   flutter:
