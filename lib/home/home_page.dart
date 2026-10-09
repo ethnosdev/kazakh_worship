@@ -5,7 +5,6 @@ import 'package:kazakh_worship/models/song.dart';
 import 'package:kazakh_worship/prayers/prayers_page.dart';
 import 'package:kazakh_worship/settings/settings_page.dart';
 import 'package:kazakh_worship/song/song_page.dart';
-import 'package:kazakh_worship/song/widgets/jump_to_song_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -44,7 +43,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Тақырыптарды таңдау / Choose Category',
+                  'Тақырыптарды таңдау',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -58,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                     if (index == 0) {
                       return ListTile(
                         leading: const Icon(Icons.all_inclusive),
-                        title: const Text('Барлық тақырыптар (All)'),
+                        title: const Text('Барлық тақырыптар'),
                         onTap: () {
                           manager.setFilter('all');
                           Navigator.pop(context);
@@ -69,11 +68,6 @@ class _HomePageState extends State<HomePage> {
                     return ListTile(
                       leading: const Icon(Icons.bookmark_border),
                       title: Text(cat.name),
-                      subtitle: Text(
-                        cat.scriptureVerse,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
                       onTap: () {
                         manager.setFilter(cat.name);
                         Navigator.pop(context);
@@ -111,27 +105,6 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.tag),
-            tooltip: 'Ән нөміріне өту',
-            onPressed: () {
-              final navigator = Navigator.of(context);
-              JumpToSongDialog.show(
-                context,
-                maxSongNumber: 142,
-                onSongSelected: (number) async {
-                  final song = await manager.dataRepo.getSongByNumber(number);
-                  if (song != null && mounted) {
-                    navigator.push(
-                      MaterialPageRoute(
-                        builder: (context) => SongPage(song: song),
-                      ),
-                    );
-                  }
-                },
-              );
-            },
-          ),
         ],
       ),
       drawer: Drawer(
@@ -139,35 +112,17 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Icon(
-                    Icons.menu_book,
-                    size: 38,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+              child: Center(
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.mode(
+                    Theme.of(context).textTheme.titleMedium!.color!,
+                    BlendMode.srcIn,
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Құдайға мадақ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    fit: BoxFit.contain,
                   ),
-                  Text(
-                    'Рухани әндер мен дұғалар',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             Padding(
@@ -175,7 +130,6 @@ class _HomePageState extends State<HomePage> {
               child: ListTile(
                 leading: const Icon(Icons.auto_stories),
                 title: const Text('Дұғалар', style: TextStyle(fontWeight: FontWeight.w600)),
-                subtitle: const Text('Сенім белгісі және жиналыс реттілігі'),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 onTap: () {
                   Navigator.pop(context);
@@ -193,7 +147,6 @@ class _HomePageState extends State<HomePage> {
               child: ListTile(
                 leading: const Icon(Icons.queue_music),
                 title: const Text('Гитара үйрену', style: TextStyle(fontWeight: FontWeight.w600)),
-                subtitle: const Text('Көктеу, шерту және ырғақ'),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 onTap: () {
                   Navigator.pop(context);
@@ -211,7 +164,6 @@ class _HomePageState extends State<HomePage> {
               child: ListTile(
                 leading: const Icon(Icons.settings),
                 title: const Text('Баптаулар', style: TextStyle(fontWeight: FontWeight.w600)),
-                subtitle: const Text('Қаріп өлшемі, тақырып / Settings'),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 onTap: () {
                   Navigator.pop(context);
@@ -360,18 +312,6 @@ class _HomePageState extends State<HomePage> {
                       song.title,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    subtitle: song.category.isNotEmpty || song.meter.isNotEmpty
-                        ? Text(
-                            [
-                              if (song.category.isNotEmpty) song.category,
-                              if (song.meter.isNotEmpty) song.meter,
-                            ].join(' • '),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                          )
-                        : null,
                     trailing: const Icon(Icons.chevron_right, size: 20),
                     onTap: () {
                       Navigator.push(

@@ -103,9 +103,9 @@ void main() {
     await tester.tap(find.text('Баптаулар'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Баптаулар / Settings'), findsOneWidget);
-    expect(find.text('Light-Dark Mode'), findsOneWidget);
-    expect(find.text('Text Size'), findsOneWidget);
+    expect(find.text('Баптаулар'), findsOneWidget);
+    expect(find.text('Ашық-күңгірт режим'), findsOneWidget);
+    expect(find.text('Қаріп өлшемі'), findsOneWidget);
 
     // Press back arrow to return to songs
     await tester.tap(find.byType(BackButton));

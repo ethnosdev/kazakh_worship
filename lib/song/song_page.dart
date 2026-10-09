@@ -80,29 +80,9 @@ class _SongPageState extends State<SongPage> {
                   builder: (context, fontSize, child) {
                     return Scaffold(
                       appBar: AppBar(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '#${currentSong.number} ${currentSong.title}',
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            if (currentSong.category.isNotEmpty || currentSong.meter.isNotEmpty)
-                              Text(
-                                [
-                                  if (currentSong.category.isNotEmpty) currentSong.category,
-                                  if (currentSong.meter.isNotEmpty) currentSong.meter,
-                                ].join(' • '),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                          ],
+                        title: Text(
+                          '#${currentSong.number} ${currentSong.title}',
+                          overflow: TextOverflow.ellipsis,
                         ),
                         actions: [
                           IconButton(
@@ -114,22 +94,6 @@ class _SongPageState extends State<SongPage> {
                             ),
                             tooltip: showChords ? 'Аккордтарды жасыру' : 'Аккордтарды көрсету',
                             onPressed: () => manager.toggleChords(),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.tag),
-                            tooltip: 'Ән нөміріне өту',
-                            onPressed: () {
-                              JumpToSongDialog.show(
-                                context,
-                                maxSongNumber: manager.songs.length,
-                                onSongSelected: (number) {
-                                  final idx = manager.getIndexForSongNumber(number);
-                                  if (idx >= 0) {
-                                    _goToPage(idx);
-                                  }
-                                },
-                              );
-                            },
                           ),
                         ],
                       ),

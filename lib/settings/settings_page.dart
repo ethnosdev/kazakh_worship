@@ -18,7 +18,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Баптаулар / Settings'),
+        title: const Text('Баптаулар'),
       ),
       body: SafeArea(
         top: false,
@@ -26,7 +26,6 @@ class _SettingsPageState extends State<SettingsPage> {
           listenable: Listenable.merge([
             themeManager.themeModeNotifier,
             userSettings.fontSizeNotifier,
-            userSettings.showChordsNotifier,
           ]),
           builder: (context, _) {
             final themeMode = themeManager.themeMode;
@@ -37,7 +36,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                   child: Text(
-                    'Көрініс / Appearance',
+                    'Көрініс',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.bold,
@@ -45,13 +44,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 ListTile(
-                  title: const Text('Light-Dark Mode'),
+                  title: const Text('Ашық-күңгірт режим'),
                   subtitle: Text(
                     themeMode == ThemeMode.light
-                        ? 'Light'
+                        ? 'Ашық'
                         : themeMode == ThemeMode.dark
-                            ? 'Dark'
-                            : 'Match device settings',
+                            ? 'Күңгірт'
+                            : 'Құрылғы баптаулары бойынша',
                   ),
                   trailing: Icon(
                     themeMode == ThemeMode.light
@@ -90,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Icon(Icons.light_mode),
                                     SizedBox(height: 4),
-                                    Text('Light'),
+                                    Text('Ашық'),
                                   ],
                                 ),
                               ),
@@ -104,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Icon(Icons.smartphone),
                                     SizedBox(height: 4),
-                                    Text('Device'),
+                                    Text('Құрылғы'),
                                   ],
                                 ),
                               ),
@@ -118,7 +117,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   children: [
                                     Icon(Icons.dark_mode),
                                     SizedBox(height: 4),
-                                    Text('Dark'),
+                                    Text('Күңгірт'),
                                   ],
                                 ),
                               ),
@@ -135,7 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
                 ListTile(
-                  title: const Text('Text Size'),
+                  title: const Text('Қаріп өлшемі'),
                   trailing: Text(
                     '${fontSize.round()}',
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -152,7 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               children: [
                                 const Spacer(),
                                 Text(
-                                  'Text Size',
+                                  'Қаріп өлшемі',
                                   style: TextStyle(fontSize: currentSize),
                                 ),
                                 const Spacer(),
@@ -178,25 +177,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     );
-                  },
-                ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-                  child: Text(
-                    'Музыка / Worship',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                SwitchListTile(
-                  title: const Text('Show Chords by Default'),
-                  subtitle: const Text('Ән мәтініндегі гитара аккордтарын көрсету'),
-                  value: userSettings.showChords,
-                  onChanged: (bool value) {
-                    userSettings.setShowChords(value);
                   },
                 ),
               ],

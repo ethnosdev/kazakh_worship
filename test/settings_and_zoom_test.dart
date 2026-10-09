@@ -109,28 +109,28 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check title and appearance section
-      expect(find.text('Баптаулар / Settings'), findsOneWidget);
-      expect(find.text('Көрініс / Appearance'), findsOneWidget);
-      expect(find.text('Light-Dark Mode'), findsOneWidget);
-      expect(find.text('Text Size'), findsOneWidget);
+      expect(find.text('Баптаулар'), findsOneWidget);
+      expect(find.text('Көрініс'), findsOneWidget);
+      expect(find.text('Ашық-күңгірт режим'), findsOneWidget);
+      expect(find.text('Қаріп өлшемі'), findsOneWidget);
 
       // Tap Light-Dark Mode to open SegmentedButton dialog
-      await tester.tap(find.text('Light-Dark Mode'));
+      await tester.tap(find.text('Ашық-күңгірт режим'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Dark'), findsOneWidget);
-      expect(find.text('Light'), findsOneWidget);
-      expect(find.text('Device'), findsOneWidget);
+      expect(find.text('Күңгірт'), findsOneWidget);
+      expect(find.text('Ашық'), findsOneWidget);
+      expect(find.text('Құрылғы'), findsOneWidget);
 
       // Select Dark mode
-      await tester.tap(find.text('Dark'));
+      await tester.tap(find.text('Күңгірт'));
       await tester.pumpAndSettle();
 
       expect(themeManager.themeMode, ThemeMode.dark);
       expect(await userSettings.getThemeMode(), ThemeMode.dark);
 
       // Tap Text Size to open slider dialog
-      await tester.tap(find.text('Text Size'));
+      await tester.tap(find.text('Қаріп өлшемі'));
       await tester.pumpAndSettle();
 
       expect(find.byType(Slider), findsOneWidget);
@@ -144,13 +144,9 @@ void main() {
       await tester.tapAt(const Offset(10, 10));
       await tester.pumpAndSettle();
 
-      // Toggle Show Chords by default switch
-      expect(find.text('Show Chords by Default'), findsOneWidget);
-      await tester.tap(find.text('Show Chords by Default'));
-      await tester.pumpAndSettle();
-
-      expect(userSettings.showChords, isTrue);
-      expect(await userSettings.getShowChords(), isTrue);
+      // Verify guitar chords option is NOT on SettingsPage
+      expect(find.text('Show Chords by Default'), findsNothing);
+      expect(find.text('Ән мәтініндегі гитара аккордтарын көрсету'), findsNothing);
     });
   });
 }
