@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_chord/flutter_chord.dart';
 import 'package:kazakh_worship/models/song.dart';
 import 'package:kazakh_worship/services/data_repository.dart';
 import 'package:kazakh_worship/song/widgets/chord_lyrics_view.dart';
@@ -17,56 +16,51 @@ void main() {
     song2 = (await repo.getSongByNumber(2))!;
   });
 
-  testWidgets('LyricsRenderer renders Song #1 with chords and without chords', (tester) async {
+  testWidgets('ChordLyricsView renders Song #1 with chords and scrolls horizontally when wide', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: LyricsRenderer(
-              lyrics: song1.chords,
-              textStyle: const TextStyle(fontSize: 18, color: Colors.black),
-              chordStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.amber),
-              showChord: true,
-              onTapChord: (_) {},
-              horizontalAlignment: CrossAxisAlignment.start,
-              widgetPadding: 40,
-            ),
+          body: ChordLyricsView(
+            song: song1,
+            fontSize: 18.0,
+            showChords: true,
           ),
         ),
       ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(LyricsRenderer), findsOneWidget);
+    expect(find.byType(ChordLyricsView), findsOneWidget);
     // Find text from song 1
     expect(find.byWidgetPredicate((w) => w is RichText && w.text.toPlainText().contains('Имануил')), findsWidgets);
     expect(find.byWidgetPredicate((w) => w is RichText && w.text.toPlainText() == 'A'), findsWidgets);
     expect(find.byWidgetPredicate((w) => w is RichText && w.text.toPlainText() == 'F#m'), findsWidgets);
+
+    final horizontalScrollable = find.byWidgetPredicate(
+      (w) => w is SingleChildScrollView && w.scrollDirection == Axis.horizontal,
+    );
+    expect(horizontalScrollable, findsOneWidget);
+    final scrollableState = tester.state<ScrollableState>(
+      find.descendant(of: horizontalScrollable, matching: find.byType(Scrollable)).first,
+    );
+    expect(scrollableState.position.maxScrollExtent, greaterThan(0.0));
   });
 
-  testWidgets('LyricsRenderer renders Song #1 without chords', (tester) async {
+  testWidgets('ChordLyricsView renders Song #1 without chords', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: LyricsRenderer(
-              lyrics: song1.chords,
-              textStyle: const TextStyle(fontSize: 18, color: Colors.black),
-              chordStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.amber),
-              showChord: false,
-              onTapChord: (_) {},
-              horizontalAlignment: CrossAxisAlignment.start,
-              widgetPadding: 40,
-            ),
+          body: ChordLyricsView(
+            song: song1,
+            fontSize: 18.0,
+            showChords: false,
           ),
         ),
       ),
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(LyricsRenderer), findsOneWidget);
+    expect(find.byType(ChordLyricsView), findsOneWidget);
     expect(find.byWidgetPredicate((w) => w is RichText && w.text.toPlainText().contains('Имануил')), findsWidgets);
     // Chords should not be displayed
     expect(find.byWidgetPredicate((w) => w is RichText && w.text.toPlainText() == 'A'), findsNothing);

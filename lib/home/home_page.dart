@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:kazakh_worship/guitar/guitar_guide_page.dart';
 import 'package:kazakh_worship/home/home_page_manager.dart';
 import 'package:kazakh_worship/models/song.dart';

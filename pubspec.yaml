@@ -3,7 +3,7 @@ description: Kazakh song book app.
 
 publish_to: "none"
 
-version: 2.0.0+2
+version: 2.0.1+3
 
 environment:
   sdk: ^3.13.0
@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
   flutter_chord: ^0.1.3
   get_it: ^9.3.0
+  material_ui: ^1.11.1
   shared_preferences: ^2.5.0
 
 dev_dependencies:
